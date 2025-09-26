@@ -1,0 +1,1 @@
+This is a little practice side project to do for fun. I really want to flesh out my Full-Stack application skills with something like this till I get the confidence in my abilities to maybe create something that is actually potentially profitable :)
