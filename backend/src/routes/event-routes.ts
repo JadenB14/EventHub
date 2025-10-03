@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 
         const { id } = req.params;
         const event = await prisma.event.findUnique({
-            where: { id },
+            where: { id: Number(id) },
             include: { author: true},
         });
 
@@ -70,15 +70,15 @@ router.put("/:id", async (req, res) => {
         const  { title, description, createdAt, location, authorId } = req.body;
 
         // Checks that event exists
-        const existingEvent = await prisma.event.findUnique({ where: { id } });
+        const existingEvent = await prisma.event.findUnique({ where: { id: Number(id) } });
         if (!existingEvent) {
             return res.status(404).json({ error: "Event not found"});
         }
 
         // Checks if current user matches authorId
         const updated = await prisma.event.update({
-            where: { id },
-            data: {
+            where: { id: Number(id) },
+            data:{
                 title,
                 description,
                 createdAt: createdAt ? new Date(createdAt) : undefined,
@@ -98,12 +98,12 @@ router.delete("/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const existingEvent = await prisma.Event.findUnique({ where: { id }});
+        const existingEvent = await prisma.event.findUnique({ where: { id: Number(id) } });
         if (!existingEvent) {
             return res.status(404).json({ error: "Event not found"});
         };
         
-        await prisma.event.delete({ where: { id }});
+        await prisma.event.delete({ where: { id: Number(id) }});
 
         res.json({ message:  "Event deleted" });
     } catch (err) {

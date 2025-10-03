@@ -1,9 +1,12 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import prisma from './prisma.ts';
-import eventRoutes from "./routes/event-routes.ts"
-
 dotenv.config();
+
+import express from 'express';
+import prisma from './prisma.ts';
+import eventRoutes from "./routes/event-routes.ts";
+import userRoutes from "./routes/user-routes.ts";
+
+
 
 const app = express();
 const PORT = process.env.PORT;
@@ -12,7 +15,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 
 // Routes
-app.use("/api/users", );
+app.use("/api/users", userRoutes);
 
 // Healthcheck
 app.get("/healthcheck", (req, res) => {
