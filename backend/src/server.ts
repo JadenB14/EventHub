@@ -5,6 +5,8 @@ import express from 'express';
 import prisma from './prisma.ts';
 import eventRoutes from "./routes/event-routes.ts";
 import userRoutes from "./routes/user-routes.ts";
+import rsvpRoutes from "./routes/rsvp-routes.ts"
+import commentRoutes from "./routes/comment-routes.ts"
 
 
 
@@ -16,6 +18,12 @@ app.use(express.json());
 
 // Routes
 app.use("/api/users", userRoutes);
+
+app.use("/api/events", eventRoutes);
+
+app.use("/api/rsvps", rsvpRoutes);
+
+app.use("/api/comments", commentRoutes)
 
 // Healthcheck
 app.get("/healthcheck", (req, res) => {

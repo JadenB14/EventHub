@@ -13,25 +13,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Comment {
   id        Int      @id @default(autoincrement())
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  content   String
   createdAt DateTime @default(now())
-  email     String   @unique
+}
+
+model RSVP {
+  id        Int        @id @default(autoincrement())
+  author    User       @relation(fields: [authorId], references: [id])
+  authorId  Int
+  event     Event      @relation(fields: [eventId], references: [id])
+  eventId   Int
+  status    RSVPStatus @default(GOING)
+  createdAt DateTime   @default(now())
+
+  @@unique([authorId, eventId])
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  email     String    @unique
   password  String
   name      String?
-  role      Role     @default(USER)
+  role      Role      @default(USER)
   events    Event[]
+  rsvps     RSVP[]
+  comments  Comment[]
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   description String
   location    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  title       String   @db.VarChar(255)
-  author      User?    @relation(fields: [authorId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String    @db.VarChar(255)
+  author      User?     @relation(fields: [authorId], references: [id])
   authorId    Int?
+  rsvps       RSVP[]
+  comments    Comment[]
+}
+
+enum RSVPStatus {
+  GOING
+  INTERESTED
+  NOT_GOING
 }
 
 enum Role {
