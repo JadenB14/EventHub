@@ -1,6 +1,9 @@
 
 
-export default function EventDetail() {
+export default function NotFound() {
+
+
+
     return (
         <div></div>
     )

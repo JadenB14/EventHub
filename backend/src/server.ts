@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import cors from 'cors';
 import express from 'express';
 import prisma from './prisma.ts';
 import eventRoutes from "./routes/event-routes.ts";
@@ -9,9 +10,11 @@ import rsvpRoutes from "./routes/rsvp-routes.ts"
 import commentRoutes from "./routes/comment-routes.ts"
 
 
+const PORT = process.env.PORT;
 
 const app = express();
-const PORT = process.env.PORT;
+app.use(cors());
+
 
 // Middleware
 app.use(express.json());

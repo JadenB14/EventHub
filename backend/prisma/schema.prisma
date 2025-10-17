@@ -1,34 +1,30 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto]
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId  String
   event     Event    @relation(fields: [eventId], references: [id])
-  eventId   Int
-  content   String
+  eventId   String
+  content   String?
   createdAt DateTime @default(now())
 }
 
 model RSVP {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(cuid())
   author    User       @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId  String
   event     Event      @relation(fields: [eventId], references: [id])
-  eventId   Int
+  eventId   String
   status    RSVPStatus @default(GOING)
   createdAt DateTime   @default(now())
 
@@ -36,7 +32,7 @@ model RSVP {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
   email     String    @unique
   password  String
@@ -48,14 +44,14 @@ model User {
 }
 
 model Event {
-  id          Int       @id @default(autoincrement())
-  description String
+  id          String    @id @default(cuid())
+  description String?
   location    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   title       String    @db.VarChar(255)
-  author      User?     @relation(fields: [authorId], references: [id])
-  authorId    Int?
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String
   rsvps       RSVP[]
   comments    Comment[]
 }

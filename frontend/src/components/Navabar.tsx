@@ -1,6 +1,6 @@
 
 
-export default function EventDetail() {
+export default function NavBar() {
     return (
         <div></div>
     )
