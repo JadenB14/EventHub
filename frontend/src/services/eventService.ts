@@ -1,15 +1,5 @@
 import api from "./api";
-
-interface EventData {
-    id: string,
-    title: string;
-    createdAt: string;
-    location: string;
-    description?: string;
-    author?: {
-        name: string
-    } 
-};
+import EventType from "../../../types/event.ts";
 
 export const getAllEvents = async (): Promise<Event[]> => {
     const response = await api.get("/api/events");
@@ -26,7 +16,11 @@ export const getEventByUser = async (id: string | null) => {
     return response.data;
 }
 
-export const createEvent = async (eventData: EventData) => {
-    const response = await api.post("/events", eventData);
+export const createEvent = async (eventData: EventType, token: string) => {
+    const response = await api.post("/api/events/", eventData, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data;
 }

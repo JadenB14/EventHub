@@ -1,17 +1,8 @@
 import { Link } from "react-router-dom";
+import EventType from "../../../types/event";
 
-export interface Event {
-    id: string;
-    title: string;
-    description: string;
-    location: string;
-    createdAt: string;
-    author?: {
-        name?: string
-    };
-}
 
-export default function EventCard({ event }: { event: Event }) {
+export default function EventCard({ event }: { event: EventType }) {
     return (
         <div className="bg-white rounded-2x1 shadow-md p-5 hover:shadow-lg transition duration-200">
             <h2 className="text-x1 font-semibold mb-2">{event.title}</h2>

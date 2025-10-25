@@ -1,63 +1,63 @@
 import { useEffect, useState } from 'react';
-import { getUserById, getUserIdFromToken } from '../services/userService'
-import { getEventByUser } from '../services/eventService';
+import { getUserProfile } from '../services/userService'
 import EventCard from '../components/EventCard';
+import UserType from "../../../types/user.ts";
 
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    createdAt: string;
-    events?: Event[];
-}
-
-interface Event {
-    id: string;
-    title: string;
-    location: string;
-    createdAt: string;
-    description: string;
-}
 
 // React profile page
 const Profile: React.FC = () => {
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<UserType>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [events, setEvents] = useState<Event[]>([]);
-
 
     useEffect(() => {
 
         // Gathers user data
         const fetchProfile = async () => {
             try {
-                const res = await getUserById(getUserIdFromToken());
-                setUser(res.data);
+                const token = localStorage.getItem("token");
+                if (!token) throw new Error("No authentication token found");
+                
+                const res: UserType = await getUserProfile(token);
+
+                const mappedEvents = res.events?.map((event) => ({
+                    id: event.id,
+                    title: event.title,
+                    location: event.location,
+                    createdAt: event.createdAt,
+                    date: event.date,
+                    description: event.description,
+                }));
+
+                const mappedRsvps = res.rsvps?.map((rsvp) => ({
+                    event: {
+                        id: rsvp.event.id,
+                        title: rsvp.event.title,
+                        location: rsvp.event.location,
+                        date: rsvp.event.date,
+                        createdAt: rsvp.event.createdAt,
+                        description: rsvp.event.description,
+                    }
+                }));
+
+                // Map events and rsvps to match EventItem structure if necessary
+                setUser({
+                    id: res.id,
+                    name: res.name,
+                    email: res.email,
+                    createdAt: res.createdAt,
+                    events: mappedEvents,
+                    rsvps: mappedRsvps,
+                });
             } catch (error: unknown) {
                 if (error instanceof Error)
                 setError(error.message || "Failed to load profile.")
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
         };
 
-        // Gathers event data
-        const fetchUserEvents = async () => {
-            try {
-                const res = await getEventByUser(getUserIdFromToken());
-                setEvents(res.data)
-            } catch (err) {
-                if (err instanceof Error) {
-                    setError(err.message || "Failed to load profile.");
-                } 
-            } finally {
-                setLoading(false);
-            }
-        }
-
         fetchProfile();
-        fetchUserEvents();
     }, []);
 
     // State check for the app
@@ -69,15 +69,15 @@ const Profile: React.FC = () => {
 	return (
         <div className='max-w-4x1 mx-auto p-6'>
             <h1 className="text-3x1 font-bold mb-4">{user.name}'s Profile</h1>
-                <p className="text-gray-600 mb-2"><span>Email:</span>{user.email}</p>
-                <p className='text-gray-600 mb-6'><span>Joined:</span>{user.createdAt}</p>
+                <p className="text-gray-600 mb-2"><span>Email: </span>{user.email}</p>
+                <p className='text-gray-600 mb-6'><span>Joined: </span>{user.createdAt}</p>
 
         <h2 className='text-2x1 font-semibold mb-3'>Your Events</h2>
 
 
-            {events && events.length > 0 ? (
+            {user.events && user.events.length > 0 ? (
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                    {events.map(event => (
+                    {user.events.map(event => (
                         <EventCard  key={event.id} event={event}/>
                     ))}
                 </div>

@@ -23,8 +23,12 @@ export const getAllUsers = async (): Promise<Event[]> => {
     return response.data
 }
 
-export const getUserById = async (id: string) => {
-    const response = await api.get(`/api/users/${id}`);
+export const getUserProfile = async (token: string) => {
+    const response = await api.get(`/api/users/me`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data
 }
 

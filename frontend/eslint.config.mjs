@@ -1,5 +1,5 @@
 export default tseslint.config({
     rules: {
-        "@typescript-eslint/no-explicit-any": false,
+        "@typescript-eslint/no-explicit-any": true,
     }
 })

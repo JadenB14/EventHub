@@ -1,14 +1,15 @@
 import { Router } from "express";
-import prisma from "../prisma.ts";
+import prisma from "../prisma";
+import { authMiddleware } from "../middlewares/auth";
 
 const router = Router();
 
 // Create event
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
-        const { title , description, createdAt, location, authorId} = req.body;
+        const { title , description, location, date } = req.body;
 
-        if (!title || !description || !location || !authorId) {
+        if (!title || !description || !location || !date) {
             return res.status(400).json({ error: "Missing required fields" });
         };
 
@@ -16,9 +17,11 @@ router.post("/", async (req, res) => {
             data: {
                 title,
                 description,
-                createdAt: new Date(createdAt),
+                createdAt: new Date(),
                 location,
-                authorId,
+                date,
+                authorId: req.userId,
+                
             },
         });
 

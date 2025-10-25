@@ -1,6 +1,7 @@
 import { Router } from "express";
-import prisma from "../prisma.ts";
-import { comparePassword, generateToken, hashPassword } from "../utils/auth.ts";
+import prisma from "../prisma";
+import { comparePassword, generateToken, hashPassword, verifyToken } from "../utils/auth";
+import { authMiddleware } from "../middlewares/auth";
 
 const router = Router();
 
@@ -72,6 +73,29 @@ router.get("/:id/events", async (req, res) => {
     }
 })
 
+router.get("/me", authMiddleware, async (req: any, res: any) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.userId },
+            select: {
+                name: true,
+                events: true,
+                email: true,
+                rsvps: true,
+                id: true,
+                createdAt: true,
+            }
+        });
+
+        if (!user) return res.status(404).json({ meesage: "User not found" });
+
+        return res.json(user)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ message: "Error fetching user", err});
+    }
+})
+
 // GET user by ID
 router.get("/:id", async (req, res) => {
     try {
@@ -82,7 +106,7 @@ router.get("/:id", async (req, res) => {
         res.status(404).json({ error: "User not found" });
     }
 
-    res.json(user);
+    return res.json(user);
     } catch (err) {
         res.status(500).json({ error: 'Failed to get user', details: err });
     }

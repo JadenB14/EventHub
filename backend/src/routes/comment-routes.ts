@@ -1,4 +1,4 @@
-import prisma from "../prisma.ts";
+import prisma from "../prisma";
 import { Router } from "express";
 
 const router = Router();
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 
 router.get("/event/:eventId", async (req, res) => {
     try{
-        const eventId = parseInt(req.params.eventId);
+        const eventId = req.params.eventId;
 
         const comments = await prisma.comment.findMany({
             where: { eventId },
@@ -41,7 +41,7 @@ router.get("/event/:eventId", async (req, res) => {
 
 router.get("/user/:userId", async (req, res) => {
     try {
-        const userId = parseInt(req.params.userId);
+        const userId = req.params.userId;
 
         const comments = await prisma.comment.findMany({
             where: { authorId: userId },
@@ -58,7 +58,7 @@ router.get("/user/:userId", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
         const { content } = req.body;
 
         const updated = await prisma.comment.update({
@@ -75,7 +75,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
 
         await prisma.comment.delete({ where: { id } });
 

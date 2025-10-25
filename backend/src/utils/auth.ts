@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { Request, Response, NextFunction } from "express";
 
 const JWT_SECRET: string = (() => {
     const secret = process.env.JWT_SECRET;
@@ -24,11 +25,16 @@ export function generateToken(userId: string): string {
     return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
 }
 
+interface JwtPayload {
+    userId: string
+}
+
 // Verify JWT
-export function verifyToken(token: string): { userId: string} | null {
+export function verifyToken(token: string): JwtPayload | null {
     try {
-        return jwt.verify(token, JWT_SECRET) as { userId: string };
-    } catch {
-        return null;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {userId: string};
+        return decoded
+    } catch (err) {
+        return null
     }
 }

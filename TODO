@@ -1,0 +1,4 @@
+1. Add high level event, rsvp, comment, and user object data for use throughout codebase
+    to improve modularity.
+
+2. 

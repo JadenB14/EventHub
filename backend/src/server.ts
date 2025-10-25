@@ -9,11 +9,27 @@ import userRoutes from "./routes/user-routes.ts";
 import rsvpRoutes from "./routes/rsvp-routes.ts"
 import commentRoutes from "./routes/comment-routes.ts"
 
-
 const PORT = process.env.PORT;
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
+
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    console.log("Headers: ", req.headers);
+    console.log("Body: ", req.body);
+
+    const originalSend = res.send;
+    res.send = function (body) {
+        console.log(`${res.statusCode} Response: `, body);
+        return originalSend.call(this, body);
+    };
+    next();
+})
 
 
 // Middleware
