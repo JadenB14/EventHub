@@ -50,8 +50,7 @@ const Profile: React.FC = () => {
                     rsvps: mappedRsvps,
                 });
             } catch (error: unknown) {
-                if (error instanceof Error)
-                setError(error.message || "Failed to load profile.")
+                if (error instanceof Error) setError(error.message || "Failed to load profile.")
             } finally {
                 setLoading(false)
             }

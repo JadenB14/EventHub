@@ -1,4 +1,5 @@
-1. Add high level event, rsvp, comment, and user object data for use throughout codebase
-    to improve modularity.
+1. Add high level event, rsvp, comment, and user object data and types for use throughout codebase to improve modularity.
 
-2. 
+2. Add comments throughout project, use few words but make them matter.
+
+3. Make sure to go back through frontend pages and add rsvp and comment support.

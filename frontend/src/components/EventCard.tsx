@@ -12,7 +12,7 @@ export default function EventCard({ event }: { event: EventType }) {
                 👤 {event.author?.name || "Unknown"}
             </p>
             <Link
-                to={`/event/${event.id}`}
+                to={`/events/${event.id}`}
                 className="inline-block bg-blue-600 text-white px-4 py-2 rounded-x1 hover:bg-blue-700 transition"
             >
                 View Details

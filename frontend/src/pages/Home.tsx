@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAllEvents } from "../services/eventService";
-import EventCard, { Event } from "../components/EventCard";
+import EventCard from "../components/EventCard";
+import EventType from "../../../types/event";
 
 export default function Home() {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<EventType[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -11,7 +12,7 @@ export default function Home() {
         const fetchEvents = async () => {
             try {
                 const data = await getAllEvents();
-                setEvents(data as unknown as Event[]);
+                setEvents(data as unknown as EventType[]);
             } catch (err) {
                 console.error(err);
                 setError("Failed to load events. Please try again later.")

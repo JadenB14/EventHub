@@ -6,8 +6,8 @@ export const getAllEvents = async (): Promise<Event[]> => {
     return response.data;
 }
 
-export const getEventById = async (id: string) => {
-    const response = await api.get(`/api/event/${id}`);
+export const getEventById = async (id: string): Promise<EventType> => {
+    const response = await api.get(`/api/events/${id}`);
     return response.data;
 }
 
