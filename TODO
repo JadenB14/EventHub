@@ -3,3 +3,13 @@
 2. Add comments throughout project, use few words but make them matter.
 
 3. Make sure to go back through frontend pages and add rsvp and comment support.
+
+4. Add unit and E2E testing for application safety.
+
+5. Add Homepage details like Profile icon, Navbar, signout button, settings, etc.
+
+6. Admin panel/database interface?
+
+7. Revamp css throughout frontend, make more streamlined and modern.
+
+8. Add auth for accessing eventhub home, userfiles 

@@ -47,6 +47,7 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ error: " Login failed" });
     }
 })
+
 // GET all users
 router.get("/", async (_req, res) => {
     try{
@@ -56,6 +57,7 @@ router.get("/", async (_req, res) => {
         res.status(500).json({ error: "Failed to get all users", details: err });
     }
 });
+
 // GET events by user id
 router.get("/:id/events", async (req, res) => {
     try {
