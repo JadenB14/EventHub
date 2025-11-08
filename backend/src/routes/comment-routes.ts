@@ -1,18 +1,26 @@
+import { authMiddleware } from "../middlewares/auth";
 import prisma from "../prisma";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+// CREATE comment
+router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
-        const { content, authorId, eventId } = req.body;
+        const { content, eventId } = req.body;
+        const authorId = req.userId;
 
         if (!content || !authorId || !eventId) {
             return res.status(400).json({ error: "text, authorId, and eventId are required" });
         }
 
         const comment = await prisma.comment.create({
-            data: { content, authorId, eventId },
+            data: { 
+                content, 
+                authorId, 
+                createdAt: new Date(),
+                eventId,
+             },
         }); 
 
         res.json(comment);
@@ -22,6 +30,7 @@ router.post("/", async (req, res) => {
     }
 });
 
+// GET all comments from a unique event
 router.get("/event/:eventId", async (req, res) => {
     try{
         const eventId = req.params.eventId;
@@ -39,9 +48,10 @@ router.get("/event/:eventId", async (req, res) => {
     }
 });
 
-router.get("/user/:userId", async (req, res) => {
+// GET all comments from a unique user
+router.get("/user/:userId", authMiddleware, async (req: any, res: any) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.userId;
 
         const comments = await prisma.comment.findMany({
             where: { authorId: userId },
@@ -56,9 +66,10 @@ router.get("/user/:userId", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+// UPDATE comments from 
+router.put("/:id", authMiddleware, async (req: any, res: any) => {
     try {
-        const id = req.params.id;
+        const id = req.userId;
         const { content } = req.body;
 
         const updated = await prisma.comment.update({
@@ -73,6 +84,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+// DELETE single comment by id
 router.delete("/:id", async (req, res) => {
     try {
         const id = req.params.id;
@@ -85,5 +97,22 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ error: "Failed to delete comment" });
     }
 });
+
+router.delete("/event/:eventId", authMiddleware, async (req: any, res:any) => {
+    try{
+        const eventId = req.params.eventId;
+
+        await prisma.comment.deleteMany({
+            where: { eventId }
+        })
+
+        res.json({ message: "Event comments deleted successfully"});
+    } catch (err: any) {
+        if (err instanceof Error) {
+            console.log(err.message)
+            return res.status(500).json({ error: "Event comments could not be deleted" })
+        }
+    }
+})
 
 export default router;

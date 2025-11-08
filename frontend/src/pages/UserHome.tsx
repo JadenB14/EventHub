@@ -2,15 +2,26 @@ import { useEffect, useState } from "react";
 import { getAllEvents } from "../services/eventService";
 import EventCard from "../components/EventCard";
 import EventType from "../../../types/event";
+import { checkToken } from "../services/authService"
 
 export default function Home() {
     const [events, setEvents] = useState<EventType[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [check, setCheck] = useState<boolean | null>(null)
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
+                const token = localStorage.getItem("token")
+                const check = await checkToken(String(token))
+
+                if (!check) {
+                    setCheck(false)
+                } else {
+                    setCheck(true)
+                }
+
                 const data = await getAllEvents();
                 setEvents(data as unknown as EventType[]);
             } catch (err) {
@@ -31,10 +42,19 @@ export default function Home() {
         );
     }
 
+    if (!check) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-lg"> You must be logged in to see events.</p>
+                <a href="/login" className="text-blue-600 hover:underline mt-12 mr-0 absolute">Login Page</a>
+            </div>
+        )
+    }
+
     if (error) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <p className="text-red-500 text-lg">{error}</p>
+                <p className="text-red-500 text-2xl">{error}</p>
             </div>
         )
     }

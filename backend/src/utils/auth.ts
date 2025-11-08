@@ -38,3 +38,13 @@ export function verifyToken(token: string): JwtPayload | null {
         return null
     }
 }
+
+export function verifyTokenBool(token: string): boolean | null {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {userId: string};
+        if (!decoded.userId) return false
+        return true
+    } catch (err) {
+        return null
+    }
+}

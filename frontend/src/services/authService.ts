@@ -10,3 +10,12 @@ export const register = async (email: string, password: string, name: string) =>
     return response.data;
 };
 
+export const checkToken = async (token: string): Promise<boolean> => {
+    const response = await api.post("/api/auth/check", {} ,{
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    return response.data;
+}
+

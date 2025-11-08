@@ -36,9 +36,9 @@ export default function Register() {
         <div>
             <a 
             href="/home"
-            className="fixed pl-5 pt-5 "
+            className="fixed pl-10 pt-5 "
             >
-                <img alt="logo" src={eventhubLogo} width={200} height={100}/>
+                <img alt="logo" src={eventhubLogo} width={300} height={100}/>
             </a>
             <div className="flex items-center justify-center min-h-screen bg-gray-300">
                 <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">

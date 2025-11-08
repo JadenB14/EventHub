@@ -8,6 +8,7 @@ import eventRoutes from "./routes/event-routes.ts";
 import userRoutes from "./routes/user-routes.ts";
 import rsvpRoutes from "./routes/rsvp-routes.ts"
 import commentRoutes from "./routes/comment-routes.ts"
+import authRoutes from "./routes/auth-routes.ts"
 
 const PORT = process.env.PORT;
 
@@ -37,6 +38,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/users", userRoutes);
+
+app.use("/api/auth", authRoutes)
 
 app.use("/api/events", eventRoutes);
 

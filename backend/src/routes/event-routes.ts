@@ -8,6 +8,7 @@ const router = Router();
 router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
         const { title , description, location, date } = req.body;
+        const authorId = req.userId;
 
         if (!title || !description || !location || !date) {
             return res.status(400).json({ error: "Missing required fields" });
@@ -20,7 +21,7 @@ router.post("/", authMiddleware, async (req: any, res: any) => {
                 createdAt: new Date(),
                 location,
                 date,
-                authorId: req.userId,
+                authorId,
                 
             },
         });
