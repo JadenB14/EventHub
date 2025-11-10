@@ -1,14 +1,16 @@
+import { authMiddleware } from "../middlewares/auth";
 import prisma from "../prisma";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
-        const { authorId, eventId, status } = req.body;
-
+        const { eventId, status } = req.body;
+        const authorId = req.userId;
+        
         if (!authorId || !eventId) {
-            return res.status(400).json({ error: "userId and eventId are required"});
+            return res.status(400).json({ error: "userId and eventId are required" });
         }
 
         const rsvp = await prisma.rSVP.upsert({
@@ -16,7 +18,7 @@ router.post("/", async (req, res) => {
                 authorId_eventId: { authorId, eventId }
             },
             update: { status },
-            create: { authorId, eventId, status},
+            create: { authorId, eventId, status },
         });
 
         res.json(rsvp);
@@ -26,13 +28,15 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/event/:eventId", async (req, res) => {
+
+router.get("/event/:eventId", authMiddleware, async (req: any, res: any) => {
     try {
         const eventId = req.params.eventId
+        const authorId = req.userId;
 
-        const rsvps = await prisma.rSVP.findMany({
-            where: { eventId },
-            include: { author: true },
+        const rsvps = await prisma.rSVP.findUnique({
+            where: { authorId_eventId: { authorId, eventId } },
+            select: { status: true },
         });
 
         res.json(rsvps)

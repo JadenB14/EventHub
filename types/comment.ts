@@ -8,6 +8,7 @@ export default interface CommentType {
     author?: {
         name: string;
     }
+    authorId: string;
 }
 
 export const CommentObject = {

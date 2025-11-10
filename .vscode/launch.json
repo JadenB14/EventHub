@@ -17,6 +17,19 @@
        "runtimeExecutable": "node",
        "cwd": "${workspaceFolder}/backend",
         },
+        {
+       "name": "Frontend",
+       "program": "${workspaceFolder}/frontend/src/main.tsx",
+       "request": "launch",
+       "skipFiles": [
+           "<node_internals>/**"
+       ],
+       "type": "node",
+       // "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+       "runtimeArgs": ["--loader", "${workspaceFolder}/backend/node_modules/ts-node/esm"],
+       "runtimeExecutable": "node",
+       "cwd": "${workspaceFolder}/backend",
+        },
         
 
 

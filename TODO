@@ -12,8 +12,16 @@
 
 7. Revamp css throughout frontend, make more streamlined and modern.
 
-8. Add auth for accessing eventhub home, userfiles 
+8. Add auth for accessing userfiles 
 
 9. Add logo to all appropriate pages in the website.
 
 10. Being able to favorite events for future lookielew.
+
+11. Create seperate profile page for users other than the user who owns the account to see their information based on user id.
+
+12. Implement ability for the user who created an event to see who and how many people rsvped for their event.
+
+13. refactor and clean up frontend code using ethical coding stratagies.
+
+14. Refactor error handling throughout code base so each page has the same error handling and type security.

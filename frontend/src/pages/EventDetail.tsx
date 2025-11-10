@@ -2,13 +2,41 @@ import { useState, useEffect } from "react"
 import EventType, { EventObject } from "../../../types/event.ts"
 import { getEventById } from "../services/eventService";
 import { useParams } from "react-router-dom";
+import CommentCard from "../components/CommentCard.tsx";
+import CommentType from "../../../types/comment.ts";
+import { createComment, getAllCommentsForEvent } from "../services/commentService.ts";
+import RsVPButton from "../components/RSVPButton.tsx";
 
 const EventDetail: React.FC = () => {
     const [eventDetails, setEventDetails] = useState<EventType>(EventObject);
     const [loading, setLoading] = useState(true);
+    const [comments, setComments] = useState<CommentType[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [content, setContent] = useState('');
 
     const { id } = useParams();
+
+    const storeComment = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("User is not authenticated.");
+            }
+            if (!id) {
+                throw new Error("No event id was found")
+            }
+                await createComment(token, content, id)
+
+            window.location.reload();
+        } catch (err) {
+            if (err instanceof Error) {
+            setError(err.message)                
+            }
+
+        }
+    }
 
     useEffect(() => {
 
@@ -16,7 +44,9 @@ const EventDetail: React.FC = () => {
             try {
                 if (id) {
                 const event = await getEventById(id);
+                const comment = await getAllCommentsForEvent(id)
                 setEventDetails(event);
+                setComments(comment)
                 }
             } catch (err: unknown) {
                 if (err instanceof Error) setError(err.message || "Failed to load event.");
@@ -50,9 +80,33 @@ const EventDetail: React.FC = () => {
                 </p>
             </div>
 
+                <RsVPButton eventId={eventDetails.id} />
+
             <div>
-                <h2>RSVP and Comments comming soon!</h2>
+                <form onSubmit={storeComment} method="POST" action="">
+                    <label>Add Comment</label>
+                    <input
+                        type='text'
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        required
+                    />
+
+                    <button
+                        type="submit"
+                    >
+                        Submit
+                    </button>
+                </form>
             </div>
+                {comments.length === 0 ? (
+                    <div>No comments yet.</div>
+                ) : (
+                    comments.map((comment) => (
+                        <CommentCard key={comment.id} comment={comment} />
+                    ))
+                )}
+
         </div>
     )
 }

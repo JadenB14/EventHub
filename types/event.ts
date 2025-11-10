@@ -1,3 +1,5 @@
+import CommentType from "./comment";
+
 export default interface EventType {
     id: string;
     title: string;
@@ -5,6 +7,7 @@ export default interface EventType {
     date: string;
     createdAt: string;
     description?: string;
+    comments?: CommentType[];
     author?: {
         name?: string;
     }
@@ -16,5 +19,5 @@ export const EventObject = {
     location: "",
     createdAt: "",
     description: "",
-    date: ""
+    date: "",
 }
