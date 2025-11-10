@@ -1,14 +1,16 @@
-import prisma from "../prisma.ts";
+import { authMiddleware } from "../middlewares/auth";
+import prisma from "../prisma";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
-        const { authorId, eventId, status } = req.body;
-
+        const { eventId, status } = req.body;
+        const authorId = req.userId;
+        
         if (!authorId || !eventId) {
-            return res.status(400).json({ error: "userId and eventId are required"});
+            return res.status(400).json({ error: "userId and eventId are required" });
         }
 
         const rsvp = await prisma.rSVP.upsert({
@@ -16,7 +18,7 @@ router.post("/", async (req, res) => {
                 authorId_eventId: { authorId, eventId }
             },
             update: { status },
-            create: { authorId, eventId, status},
+            create: { authorId, eventId, status },
         });
 
         res.json(rsvp);
@@ -26,13 +28,15 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/event/:eventId", async (req, res) => {
-    try {
-        const eventId = parseInt(req.params.eventId)
 
-        const rsvps = await prisma.rSVP.findMany({
-            where: { eventId },
-            include: { author: true },
+router.get("/event/:eventId", authMiddleware, async (req: any, res: any) => {
+    try {
+        const eventId = req.params.eventId
+        const authorId = req.userId;
+
+        const rsvps = await prisma.rSVP.findUnique({
+            where: { authorId_eventId: { authorId, eventId } },
+            select: { status: true },
         });
 
         res.json(rsvps)
@@ -44,7 +48,7 @@ router.get("/event/:eventId", async (req, res) => {
 
 router.get("/user/:userId", async (req, res) => {
     try {
-        const userId = parseInt(req.params.userId)
+        const userId = req.params.userId;
         const rsvps = await prisma.rSVP.findMany({
             where: { authorId: userId },
             include: { event: true }
@@ -59,7 +63,7 @@ router.get("/user/:userId", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = req.params.id;
 
         const rsvp = await prisma.rSVP.delete({ where: { id } });
 

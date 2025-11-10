@@ -6,7 +6,7 @@
   "author": "Jaden B",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:migrate": "npx prisma migrate dev",
@@ -14,9 +14,10 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.8.1",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "install": "^0.13.0",
@@ -25,11 +26,13 @@
     "prisma": "^6.16.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
     "bcrypt": "^6.0.0",
-    "jsonwebtoken": "^9.0.2"
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "webpack-env": "^0.8.0"
   }
 }
