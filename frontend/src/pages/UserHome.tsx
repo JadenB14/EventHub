@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllEvents } from "../services/eventService";
 import EventCard from "../components/EventCard";
-import EventType from "../../../types/event";
+import EventType from "../../types/event";
 import { checkToken } from "../services/authService"
 
 export default function Home() {

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import CommentType from "../../../types/comment"
+import CommentType from "../../types/comment"
 
 export default function CommentCard({ comment }: { comment: CommentType}) {
     return (

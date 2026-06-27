@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import EventType from "../../../types/event";
+import EventType from "../../types/event";
 
 
 export default function EventCard({ event }: { event: EventType }) {

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import EventType, { EventObject } from '../../../types/event.ts'
+import EventType, { EventObject } from '../../types/event.ts'
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../services/eventService"
 

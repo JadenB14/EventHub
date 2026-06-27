@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import cors from 'cors';
 import express from 'express';
 import prisma from './prisma.ts';
@@ -16,6 +13,8 @@ const app = express();
 
 app.use(cors({
     origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT","DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
 }));
 

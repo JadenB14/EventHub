@@ -12,7 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <NavBar />
-      <div className='min-h-screen bg-sky-500'>
+      <div className='min-h-screen bg-gray-300'>
         <Routes>
           <Route path='/home' element={<UserHome />} />
           <Route path='/login' element={<Login />} />
