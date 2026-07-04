@@ -7,6 +7,7 @@ import EventDetail from './pages/EventDetail';
 import CreateEvent from './pages/CreateEvent';
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import CoverPage from "./pages/CoverPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <NavBar />
       <div className='min-h-screen bg-gray-300'>
         <Routes>
+          <Route path='/' element={<CoverPage />}></Route>
           <Route path='/home' element={<UserHome />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
