@@ -71,7 +71,7 @@ router.put("/:id", async (req, res) => {
     try {
 
         const { id } = req.params;
-        const  { title, description, createdAt, location, authorId } = req.body;
+        const  { title, description, createdAt, location, authorId, dateOf } = req.body;
 
         // Checks that event exists
         const existingEvent = await prisma.event.findUnique({ where: { id } });
@@ -87,6 +87,7 @@ router.put("/:id", async (req, res) => {
                 description,
                 createdAt: createdAt ? new Date(createdAt) : undefined,
                 location,
+                dateOf
             },
         });
 

@@ -61,6 +61,7 @@ export default function Home() {
     // Renders Home page with logic
     return (
         <div className="max-w-6x1 mx-auto px-4 py-10">
+            
             <h1 className="text-3x1 font-bold mb-6 text-gray-800">Upcoming Events</h1>
 
             {events.length === 0 ? (

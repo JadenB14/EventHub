@@ -16,6 +16,15 @@ services:
     build: ./backend
     container_name: app_backend
     restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
     ports:
       - "4000:4000"
     environment:
@@ -33,6 +42,15 @@ services:
     build: ./frontend
     container_name: app_frontend
     restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
     ports:
       - "5173:5173"
     environment:
