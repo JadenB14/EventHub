@@ -46,12 +46,12 @@ router.get("/event/:eventId", authMiddleware, async (req: any, res: any) => {
     }
 });
 
-router.get("/user/:userId", async (req, res) => {
+router.get("/user/", authMiddleware, async (req: any, res: any) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.userId;
         const rsvps = await prisma.rSVP.findMany({
             where: { authorId: userId },
-            include: { event: true }
+            include: { event: true, author: true }
         });
 
         res.json(rsvps)

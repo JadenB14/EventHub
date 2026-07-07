@@ -1,0 +1,65 @@
+services:
+  db:
+    image: postgres:16
+    container_name: app_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: jadenb14
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eventhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: app_backend
+    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgresql://jadenb14:postgres@db:5432/eventhub?schema=public
+      PORT: 4000
+      NODE_ENV: development
+      JWT_SECRET: test
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./frontend
+    container_name: app_frontend
+    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:4000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:

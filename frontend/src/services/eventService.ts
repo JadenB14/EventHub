@@ -1,5 +1,5 @@
 import api from "./api";
-import EventType from "../../../types/event.ts";
+import EventType from "../../types/event.ts";
 
 export const getAllEvents = async (): Promise<Event[]> => {
     const response = await api.get("/api/events");

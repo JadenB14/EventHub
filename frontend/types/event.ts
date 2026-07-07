@@ -4,7 +4,7 @@ export default interface EventType {
     id: string;
     title: string;
     location: string;
-    dateOf: string;
+    date: string;
     createdAt: string;
     description?: string;
     comments?: CommentType[];
@@ -19,5 +19,5 @@ export const EventObject = {
     location: "",
     createdAt: "",
     description: "",
-    dateOf: "",
+    date: "",
 }

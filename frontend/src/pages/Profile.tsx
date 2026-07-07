@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getUserProfile } from '../services/userService'
 import EventCard from '../components/EventCard';
-import UserType from "../../../types/user.ts";
+import UserType from "../../types/user.ts";
+import RsvpType from '../../types/rsvp.ts';
+import { getUserRsvps } from '../services/rsvpService.ts';
 
 
 // React profile page
@@ -18,10 +20,12 @@ const Profile: React.FC = () => {
                 const token = localStorage.getItem("token");
                 if (!token) throw new Error("No authentication token found");
                 
-                const res: UserType = await getUserProfile(token);
+                const userRes: UserType = await getUserProfile(token);
+                const rsvpRes: RsvpType[] = await getUserRsvps(token);
 
-                const mappedEvents = res.events?.map((event) => ({
+                const mappedEvents = userRes.events?.map((event) => ({
                     id: event.id,
+                    author: event.author,
                     title: event.title,
                     location: event.location,
                     createdAt: event.createdAt,
@@ -29,7 +33,7 @@ const Profile: React.FC = () => {
                     description: event.description,
                 }));
 
-                const mappedRsvps = res.rsvps?.map((rsvp) => ({
+                const mappedRsvps = rsvpRes.map((rsvp) => ({
                     event: {
                         id: rsvp.event.id,
                         title: rsvp.event.title,
@@ -42,10 +46,10 @@ const Profile: React.FC = () => {
 
                 // Map events and rsvps to match EventItem structure if necessary
                 setUser({
-                    id: res.id,
-                    name: res.name,
-                    email: res.email,
-                    createdAt: res.createdAt,
+                    id: userRes.id,
+                    name: userRes.name,
+                    email: userRes.email,
+                    createdAt: userRes.createdAt,
                     events: mappedEvents,
                     rsvps: mappedRsvps,
                 });
@@ -72,8 +76,6 @@ const Profile: React.FC = () => {
                 <p className='text-gray-600 mb-6'><span>Joined: </span>{user.createdAt}</p>
 
         <h2 className='text-2x1 font-semibold mb-3'>Your Events</h2>
-
-
             {user.events && user.events.length > 0 ? (
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {user.events.map(event => (
@@ -82,6 +84,18 @@ const Profile: React.FC = () => {
                 </div>
             ) : (
                 <p className='text-gray-500'>You haven't created any events yet.</p>
+            )}
+
+
+        <h2 className='text-1xl font-semibold mb-3'>Your RSVPs</h2>
+            {user.rsvps && user.rsvps.length > 0 ? (
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    {user.rsvps.map((rsvp, idx) => (
+                        <EventCard key={rsvp.event.id || idx} event={rsvp.event} />
+                    ))}
+                </div>
+            ): (
+                <p>No RSVP's have been set.</p>
             )}
         </div>
     );

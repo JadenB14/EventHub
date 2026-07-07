@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
-import EventType, { EventObject } from "../../../types/event.ts"
+import EventType, { EventObject } from "../../types/event.ts"
 import { getEventById } from "../services/eventService";
 import { useParams } from "react-router-dom";
 import CommentCard from "../components/CommentCard.tsx";
-import CommentType from "../../../types/comment.ts";
+import CommentType from "../../types/comment.ts";
 import { createComment, getAllCommentsForEvent } from "../services/commentService.ts";
 import RsVPButton from "../components/RSVPButton.tsx";
 

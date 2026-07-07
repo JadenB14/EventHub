@@ -7,10 +7,10 @@ const router = Router();
 // Create event
 router.post("/", authMiddleware, async (req: any, res: any) => {
     try {
-        const { title , description, location, date } = req.body;
+        const { title , description, location, dateOf } = req.body;
         const authorId = req.userId;
 
-        if (!title || !description || !location || !date) {
+        if (!title || !description || !location || !dateOf) {
             return res.status(400).json({ error: "Missing required fields" });
         };
 
@@ -20,7 +20,7 @@ router.post("/", authMiddleware, async (req: any, res: any) => {
                 description,
                 createdAt: new Date(),
                 location,
-                date,
+                dateOf,
                 authorId,
                 
             },
@@ -71,7 +71,7 @@ router.put("/:id", async (req, res) => {
     try {
 
         const { id } = req.params;
-        const  { title, description, createdAt, location, authorId } = req.body;
+        const  { title, description, createdAt, location, authorId, dateOf } = req.body;
 
         // Checks that event exists
         const existingEvent = await prisma.event.findUnique({ where: { id } });
@@ -87,6 +87,7 @@ router.put("/:id", async (req, res) => {
                 description,
                 createdAt: createdAt ? new Date(createdAt) : undefined,
                 location,
+                dateOf
             },
         });
 

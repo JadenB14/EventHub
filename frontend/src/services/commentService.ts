@@ -1,5 +1,5 @@
 import api from "./api"
-import CommentType from "../../../types/comment.ts"
+import CommentType from "../../types/comment.ts"
 
 export const createComment = async (token: string, content: string, eventId: string): Promise<CommentType> => {
     const response = await api.post("/api/comments/", {
